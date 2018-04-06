@@ -36,16 +36,18 @@ public class HomeClient {
 	    RestTemplate restTemplate = new RestTemplate();
 	    HttpHeaders requestHeaders = new HttpHeaders();
 	    requestHeaders.setContentType(MediaType.APPLICATION_JSON);
-	    if (track.getTrackTitle() != null && track.getTrackSinger() != null && track.getTrackAlbum() != null) {
-			track.setTrackStatus("Track is Registered!.....");
-		}
-	    HttpEntity<Track> entity = new HttpEntity<Track>(track, requestHeaders);
-	    ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
-	    if(track.getTrackStatus().equals("Track is Registered!.....")) {
-		    model.addAttribute("trackDetails", track);
+	    if ((track.getTrackTitle() != null && track.getTrackSinger() != null && track.getTrackAlbum() != null) && 
+			(track.getTrackTitle() != "" && track.getTrackSinger() != "" && track.getTrackAlbum() != ""))  {
+	    	track.setTrackStatus("Track is Registered!.....");
+		    HttpEntity<Track> entity = new HttpEntity<Track>(track, requestHeaders);
+		    ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);
+			model.addAttribute("trackDetails", track);
+		    System.out.println("Result is ::: " + result);
+			return "TrackDetails";
+	    } else {
+			model.addAttribute("ErrorMessage", "Track can not be Registered!... Please provide valid details");
+			return "Error";
 	    }
-	    System.out.println("Result is ::: " + result);
-		return "TrackDetails";
 	}
 	
 	/*public static void main(String[] args) {
